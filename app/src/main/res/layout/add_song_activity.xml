@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink_background"
+    android:padding="16dp">
+
+    <!-- Logo Aplikasi -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:contentDescription="@string/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+    <!-- Judul Aplikasi -->
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tambah Musik"
+        android:textColor="@color/deep_pink"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+    <!-- Song Name Input -->
+    <EditText
+        android:id="@+id/song_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_title"
+        android:textColor="@color/deep_pink"
+        android:textColorHint="@color/pink_light"
+        android:background="@drawable/rounded_input"
+        android:layout_marginTop="24dp"
+        android:hint="Song Name"
+        android:inputType="text" />
+
+    <!-- Artist Name Input -->
+    <EditText
+        android:id="@+id/artist_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/song_name_input"
+        android:textColor="@color/deep_pink"
+        android:textColorHint="@color/pink_light"
+        android:background="@drawable/rounded_input"
+        android:layout_marginTop="16dp"
+        android:hint="Artist Name"
+        android:inputType="text" />
+
+    <!-- Select MP3 File -->
+    <Button
+        android:id="@+id/select_mp3_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/artist_name_input"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold"
+        android:background="@drawable/rounded_button"
+        android:text="Pilih Musik (MP3)" />
+
+    <!-- Select Thumbnail -->
+    <Button
+        android:id="@+id/select_thumbnail_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/select_mp3_button"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold"
+        android:background="@drawable/rounded_button"
+        android:text="Pilih Thumbnail" />
+
+    <!-- Preview Thumbnail -->
+    <ImageView
+        android:id="@+id/thumbnail_image_view"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/select_thumbnail_button"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Add Song Button -->
+    <Button
+        android:id="@+id/add_song_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thumbnail_image_view"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold"
+        android:background="@drawable/rounded_button"
+        android:text="Tambah Musik" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_song_button"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold"
+        android:background="@drawable/rounded_button"
+        android:text="Kembali" />
+</RelativeLayout>

@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp" >
+
+    <ImageView
+        android:id="@+id/song_thumbnail"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_music_logo" />
+
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/song_thumbnail"
+        android:layout_alignTop="@id/song_thumbnail"
+        android:layout_marginStart="8dp"
+        android:text="Song Name"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold" />
+
+    <TextView
+        android:id="@+id/artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/song_thumbnail"
+        android:layout_below="@id/song_name"
+        android:layout_marginStart="8dp"
+        android:text="Artist Name"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_regular" />
+
+    <ImageButton
+        android:id="@+id/delete_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/delete_song"
+        android:src="@drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/add_to_playlist_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/delete_button"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/add"
+        android:contentDescription="@string/add_to_playlist" />
+</RelativeLayout>

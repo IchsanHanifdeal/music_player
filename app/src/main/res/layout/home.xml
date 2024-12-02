@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink_background"
+    android:padding="16dp">
+
+    <!-- Logo Aplikasi -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:contentDescription="@string/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+    <!-- Judul Aplikasi -->
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/deep_pink"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+    <!-- Pesan Jika Tidak Ada Lagu -->
+    <TextView
+        android:id="@+id/empty_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_music"
+        android:textColor="@color/deep_pink"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_black"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/app_title"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/recycler_background"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <!-- Floating Action Button -->
+    <ImageView
+        android:id="@+id/fab_add_song"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_add"
+        android:background="@drawable/fab_background"
+        android:contentDescription="@string/add_song"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp" />
+</RelativeLayout>
