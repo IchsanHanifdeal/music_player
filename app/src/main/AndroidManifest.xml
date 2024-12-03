@@ -27,18 +27,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Register activity -->
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".AddSongActivity"
-            android:exported="true" />
     </application>
 
 

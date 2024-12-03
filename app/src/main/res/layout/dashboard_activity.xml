@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink_background"
+    android:padding="16dp">
+
+    <!-- Logo Aplikasi -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:contentDescription="@string/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:elevation="8dp"
+        android:background="@drawable/rounded_button" />
+
+    <!-- Judul Aplikasi -->
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/deep_pink"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+    <!-- SearchView for Music Search -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/music_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_title"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/deep_pink"
+        android:textColorHint="@color/pink_light"
+        android:queryHint="@string/search_music"
+        android:iconifiedByDefault="false"
+        android:paddingEnd="16dp"
+        android:background="@drawable/recycler_background"
+        android:paddingStart="16dp" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/music_search_view"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/recycler_background"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+    <!-- Floating Action Button for Adding Songs -->
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/fab_background"
+        android:elevation="8dp">
+
+        <ImageView
+            android:id="@+id/fab_add_song"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_add"
+            android:contentDescription="@string/add_song"
+            app:tint="@color/white" />
+    </RelativeLayout>
+
+    <!-- Floating Action Button for Adding Playlist -->
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/fab_add_song"
+        android:layout_margin="16dp"
+        android:background="@drawable/fab_background"
+        android:elevation="8dp"
+        tools:ignore="NotSibling">
+
+        <ImageView
+            android:id="@+id/fab_add_playlist"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_playlist"
+            android:contentDescription="Tambah Playlist"
+            app:tint="@color/white" />
+    </RelativeLayout>
+
+</RelativeLayout>
