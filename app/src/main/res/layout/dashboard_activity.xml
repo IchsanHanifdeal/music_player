@@ -32,27 +32,12 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp" />
 
-    <!-- SearchView for Music Search -->
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/music_search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_title"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/deep_pink"
-        android:textColorHint="@color/pink_light"
-        android:queryHint="@string/search_music"
-        android:iconifiedByDefault="false"
-        android:paddingEnd="16dp"
-        android:background="@drawable/recycler_background"
-        android:paddingStart="16dp" />
-
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/music_search_view"
+        android:layout_below="@id/app_title"
         android:layout_marginTop="16dp"
         android:padding="8dp"
         android:clipToPadding="false"
@@ -71,14 +56,15 @@
         android:background="@drawable/fab_background"
         android:elevation="8dp">
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_song"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
             android:contentDescription="@string/add_song"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            app:backgroundTint="@color/deep_pink"
+            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <!-- Floating Action Button for Adding Playlist -->
@@ -99,6 +85,29 @@
             android:layout_centerInParent="true"
             android:src="@drawable/ic_playlist"
             android:contentDescription="Tambah Playlist"
+            app:tint="@color/white" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="-194dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toStartOf="@id/fab_add_playlist"
+        android:background="@drawable/fab_background"
+        android:elevation="8dp"
+        tools:ignore="NotSibling">
+
+        <ImageView
+            android:id="@+id/fab_logout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="Logout"
+            android:src="@drawable/out"
             app:tint="@color/white" />
     </RelativeLayout>
 
