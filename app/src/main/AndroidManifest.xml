@@ -52,8 +52,10 @@
             tools:ignore="MissingClass">
         </activity>
 
-        <!-- Aktivitas untuk menambah lagu -->
-        <activity android:name=".AddSongActivity"
-            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".PlaylistActivity"
+            android:exported="true"
+            tools:ignore="MissingClass">
+        </activity>
     </application>
 </manifest>
