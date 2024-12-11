@@ -55,7 +55,8 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="8dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/add"
+        android:src="@drawable/not_add"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/add_to_playlist"
         android:padding="8dp" />
 

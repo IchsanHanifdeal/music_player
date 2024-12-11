@@ -2,13 +2,17 @@ package com.example.spotify
 
 import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.DocumentsContract
 import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
+import androidx.appcompat.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,17 +25,17 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var songList: MutableList<Map<String, String>>
+    private lateinit var songListCopy: MutableList<Map<String, String>> // A copy of the song list for searching
     private var mediaPlayer: MediaPlayer? = null
-    private val songList = mutableListOf<Map<String, String>>()
     private var currentSongIndex = 0
     private var currentSongUri: Uri? = null
     private var isPlaying = false
     private lateinit var songProgressBar: ProgressBar
     private lateinit var songDurationText: TextView
-
     private val playlist = mutableListOf<Map<String, String>>() // Playlist
 
-    // Register the ActivityResultLauncher to handle the folder selection
+    // Register the ActivityResultLauncher to handle folder selection
     private val selectFolderLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
             uri?.let { loadSongsFromFolder(it) }
@@ -41,20 +45,47 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard_activity)
 
-        // Initialize RecyclerView
+        // Initialize RecyclerView and adapter
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        songList = mutableListOf() // Initialize your song list here
+        songListCopy = songList.toMutableList() // Create a copy of song list for searching
+
+        // Perbaikan: Menambahkan parameter untuk listener
         trackAdapter = TrackAdapter(
             this,
             songList,
-            { song -> playMusic(song["name"], song["uri"]) },
-            { song -> togglePlaylist(song) }
+            { song ->
+                // onSongClickListener: Ketika lagu dipilih, putar lagu
+                playMusic(song["name"], song["uri"])
+            },
+            { song ->
+                // onAddToPlaylistListener: Menambah atau menghapus lagu dari playlist
+                togglePlaylist(song)
+            }
         )
         recyclerView.adapter = trackAdapter
 
         // Initialize UI elements
         songProgressBar = findViewById(R.id.song_progress_bar)
         songDurationText = findViewById(R.id.song_duration)
+
+        // SearchView for searching songs
+        val searchView = findViewById<SearchView>(R.id.search_view)
+        val searchIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        searchIcon.setColorFilter(Color.BLACK)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // You can perform any action when the search is submitted (optional)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the song list based on search text
+                filterSongs(newText)
+                return true
+            }
+        })
 
         // Play/Pause button
         val playPauseButton = findViewById<ImageView>(R.id.play_pause_button)
@@ -130,6 +161,7 @@ class DashboardActivity : AppCompatActivity() {
                     songList.add(mapOf("name" to name, "uri" to fileUri))
                 }
             }
+            songListCopy = songList.toMutableList() // Update the copy for searching
             trackAdapter.notifyDataSetChanged()
         }
     }
@@ -183,70 +215,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    // Toggle play/pause
-    private fun togglePlayPause(playPauseButton: ImageView) {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                it.pause()
-                isPlaying = false
-                playPauseButton.setImageResource(R.drawable.play_button)
-            } else {
-                it.start()
-                isPlaying = true
-                playPauseButton.setImageResource(R.drawable.pause_button)
-            }
-        }
-    }
-
-    // Play next song
-    private fun playNextSong() {
-        if (songList.isEmpty()) return
-
-        currentSongIndex = (currentSongIndex + 1) % songList.size
-        val nextSong = songList[currentSongIndex]
-        playMusic(nextSong["name"], nextSong["uri"])
-    }
-
-    // Play previous song
-    private fun playPreviousSong() {
-        if (songList.isEmpty()) return
-
-        currentSongIndex = if (currentSongIndex - 1 < 0) songList.size - 1 else currentSongIndex - 1
-        val previousSong = songList[currentSongIndex]
-        playMusic(previousSong["name"], previousSong["uri"])
-    }
-
-    // Update song duration
-    private fun updateSongDuration() {
-        val duration = mediaPlayer?.duration ?: 0
-        val minutes = (duration / 1000) / 60
-        val seconds = (duration / 1000) % 60
-        songDurationText.text = String.format("%02d:%02d", minutes, seconds)
-
-        // Start progress bar updates
-        songProgressBar.max = duration
-    }
-
-    // Update progress bar
-    private fun updateProgressBar() {
-        val updateProgress = object : Thread() {
-            override fun run() {
-                try {
-                    while (mediaPlayer?.isPlaying == true) {
-                        runOnUiThread {
-                            val currentPosition = mediaPlayer?.currentPosition ?: 0
-                            songProgressBar.progress = currentPosition
-                        }
-                        Thread.sleep(1000)
-                    }
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-        updateProgress.start()
-    }
-
     // Add or remove song from playlist
     private fun togglePlaylist(song: Map<String, String>) {
         if (playlist.contains(song)) {
@@ -256,6 +224,80 @@ class DashboardActivity : AppCompatActivity() {
             playlist.add(song)
             Toast.makeText(this, "${song["name"]} added to playlist", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Function to filter songs based on search query
+    private fun filterSongs(query: String?) {
+        val filteredList = if (query.isNullOrEmpty()) {
+            songListCopy // Return original list if query is empty
+        } else {
+            songListCopy.filter { song ->
+                song["name"]?.contains(query, ignoreCase = true) == true
+            }
+        }
+        songList.clear()
+        songList.addAll(filteredList)
+        trackAdapter.notifyDataSetChanged()
+    }
+
+    // Toggle play/pause
+    private fun togglePlayPause(playPauseButton: ImageView) {
+        if (isPlaying) {
+            mediaPlayer?.pause()
+            isPlaying = false
+            playPauseButton.setImageResource(R.drawable.play_button) // Set to play icon
+        } else {
+            mediaPlayer?.start()
+            isPlaying = true
+            playPauseButton.setImageResource(R.drawable.pause_button) // Set to pause icon
+        }
+    }
+
+    // Play next song
+    private fun playNextSong() {
+        if (currentSongIndex + 1 < songList.size) {
+            val nextSong = songList[currentSongIndex + 1]
+            playMusic(nextSong["name"], nextSong["uri"])
+        } else {
+            Toast.makeText(this, "This is the last song", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Play previous song
+    private fun playPreviousSong() {
+        if (currentSongIndex - 1 >= 0) {
+            val previousSong = songList[currentSongIndex - 1]
+            playMusic(previousSong["name"], previousSong["uri"])
+        } else {
+            Toast.makeText(this, "This is the first song", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Update the song duration
+    private fun updateSongDuration() {
+        mediaPlayer?.apply {
+            val durationInSeconds = duration / 1000
+            val minutes = durationInSeconds / 60
+            val seconds = durationInSeconds % 60
+            songDurationText.text = String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
+    // Update the progress bar
+    private fun updateProgressBar() {
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                // Check if mediaPlayer is initialized and playing
+                mediaPlayer?.let {
+                    val currentPosition = it.currentPosition
+                    songProgressBar.progress = currentPosition
+                    // Update every 1000 milliseconds (1 second)
+                    handler.postDelayed(this, 1000)
+                }
+            }
+        }
+        handler.post(runnable)
     }
 
     override fun onDestroy() {

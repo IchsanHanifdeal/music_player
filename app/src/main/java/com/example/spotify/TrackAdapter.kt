@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(
     private val context: Context,
-    private val songs: MutableList<Map<String, String>>, // List of songs as Map
-    private val onSongClickListener: (Map<String, String>) -> Unit, // Click listener to play song
-    private val onAddToPlaylistListener: (Map<String, String>) -> Unit, // Add to playlist listener
+    private val songs: MutableList<Map<String, String>>, // Daftar lagu dalam bentuk Map
+    private val onSongClickListener: (Map<String, String>) -> Unit, // Listener untuk memutar lagu
+    private val onAddToPlaylistListener: (Map<String, String>) -> Unit // Listener untuk menambah lagu ke playlist
 ) : RecyclerView.Adapter<TrackAdapter.SongViewHolder>() {
 
-    private val playlist = mutableListOf<Map<String, String>>() // Playlist
+    private val playlist = mutableListOf<Map<String, String>>() // Playlist untuk menampung lagu yang ditambahkan
 
+    // ViewHolder untuk item lagu
     inner class SongViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val songName: TextView = itemView.findViewById(R.id.song_name)
         val artistName: TextView = itemView.findViewById(R.id.artist_name)
@@ -34,40 +35,49 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val song = songs[position]
 
-        // Set song name and artist
+        // Menampilkan nama lagu dan artis
         holder.songName.text = song["name"] ?: "Unknown Title"
-        holder.artistName.text = "Unknown Artist" // Add artist info if available
+        holder.artistName.text = song["artist"] ?: "Unknown Artist" // Menambahkan nama artis jika ada
 
-        // Set click listener for item to play song
+        // Menambahkan listener untuk item klik untuk memutar lagu
         holder.itemView.setOnClickListener {
             onSongClickListener(song)
         }
 
-        // Update button state (added/not added)
+        // Menampilkan status tombol (ditambahkan/tidak)
         updateButtonState(holder.addToPlaylistButton, playlist.contains(song))
 
-        // Click to add song to playlist
+        // Menambahkan listener klik untuk tombol tambah ke playlist
         holder.addToPlaylistButton.setOnClickListener {
-            onAddToPlaylistListener(song)
+            togglePlaylist(song)
+            // Perbarui status tombol setelah toggle
+            updateButtonState(holder.addToPlaylistButton, playlist.contains(song))
         }
     }
 
     override fun getItemCount(): Int = songs.size
 
-    // Update the button's state
+    // Fungsi untuk memperbarui status tombol (apakah sudah ditambahkan ke playlist atau belum)
     private fun updateButtonState(button: ImageButton, isAdded: Boolean) {
-        val context = button.context
-
         if (isAdded) {
-            button.backgroundTintList = ContextCompat.getColorStateList(context, android.R.color.holo_red_light)
+            button.setImageResource(R.drawable.add) // Button state for added song
         } else {
-            button.backgroundTintList = ContextCompat.getColorStateList(context, android.R.color.white)
-            button.setBackgroundResource(R.drawable.not_add)
+            button.setImageResource(R.drawable.not_add) // Button state for non-added song
         }
-
-        button.setImageResource(R.drawable.add)
     }
 
-    // Get the playlist
+    // Fungsi untuk mendapatkan daftar playlist
     fun getPlaylist(): List<Map<String, String>> = playlist
+
+    // Fungsi untuk menambah lagu ke playlist atau menghapusnya
+    private fun togglePlaylist(song: Map<String, String>) {
+        if (playlist.contains(song)) {
+            playlist.remove(song)
+            Toast.makeText(context, "${song["name"]} dihapus dari playlist", Toast.LENGTH_SHORT).show()
+        } else {
+            playlist.add(song)
+            Toast.makeText(context, "${song["name"]} ditambahkan ke playlist", Toast.LENGTH_SHORT).show()
+        }
+        notifyDataSetChanged() // Memperbarui tampilan daftar lagu
+    }
 }

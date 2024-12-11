@@ -14,5 +14,6 @@
     <string name="search_music">Cari Musik</string>
     <string name="already_have_account_login">Already Have Account Login</string>
     <string name="login_with_google">Login with Google</string>
+    <string name="search_hint">Cari...</string>
     <string name="dont_have_account_sign_up" tools:ignore="StringEscaping">Don\'t have an account? Sign up</string>
 </resources>
